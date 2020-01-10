@@ -1,0 +1,3 @@
+** TODO Add commit parent relations
+** TODO Provide awk script as alternative (different branch)
+** TODO Add tutorial draft
