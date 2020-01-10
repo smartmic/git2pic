@@ -23,6 +23,8 @@
 # along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 
 
+echo "@startuml"
+
 for obj in $(find .git/objects -type f  \
     | sed -e 's/^.git\/objects\///'  -e 's/\///' \
     | cut -c-5) 
@@ -60,3 +62,4 @@ substr($3,1,5), o, substr($3,1,5), $4}'
     fi
 done | sort -k 3 | uniq
 
+echo "@enduml"
