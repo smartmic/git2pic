@@ -24,6 +24,7 @@
 
 
 echo "@startuml"
+echo "left to right direction"
 
 for obj in $(find .git/objects -type f  \
     | sed -e 's/^.git\/objects\///'  -e 's/\///' \
