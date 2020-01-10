@@ -24,6 +24,8 @@
 
 
 echo "@startuml"
+echo "!pragma ratio 0.99"
+echo "scale 0.9"
 echo "left to right direction"
 
 for obj in $(find .git/objects -type f  \
