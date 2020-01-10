@@ -1,49 +1,148 @@
 * Git Internals Visualization
-  :PROPERTIES:
-  :CUSTOM_ID: git-internals-visualization
-  :END:
 
-** What?
-   :PROPERTIES:
-   :CUSTOM_ID: what
-   :END:
+** Introduction
+
+*** What?
 
 This project provides a small script which compiles a text file in
-PlantUML notation, provided the invoking command is run from within a
-Git repository. The resulting PlantUML diagram is meant to visualize the
-internal graph of Git commits, refs, trees and blobs.
+PlantUML notation, provided the invoking command is run from within
+a Git repository.  The resulting PlantUML diagram is meant to
+visualize the internal graph of Git commits, refs, trees and blobs.
 
-** How?
-   :PROPERTIES:
-   :CUSTOM_ID: how
-   :END:
+*** How?
 
-A bash or awk script inspects the .git/ directory using standard git
-commands. The script generates a [[plantuml.com][PlantUML]] description
-file on stdout. The output can be piped to PlantUML, either directly in
-case of a local installation or via the clipboard to the web
-demonstration page.
+A Bash or Awk script inspects the .git/ directory using standard git
+commands.  The script generates a [[http://plantuml.com][PlantUML]] description file on
+stdout.  The output can be piped to PlantUML, either directly in case
+of a local installation or via the clipboard to the web demonstration
+page.
 
-** Why?
-   :PROPERTIES:
-   :CUSTOM_ID: why
-   :END:
+*** Why?
 
-Git is very powerful tool with overwhelming feature richness. Most
+Git is very powerful tool with overwhelming feature richness.  Most
 casual or new users only use a part of its functionality and have
-troubles to understand, scale or fully exploit it. It is always
-difficult and sometimes impossible to really work well with a tool you
-do not understand. To aid learning Git, I thought it is a good idea to
-have a visual representation of the DAG under the hood. Inspired by
-[[http://teohm.com/blog/learning-git-internals-by-example/][Learning Git
-Internals by Example]], I wanted to have the possibility to visualize
-any Git repository without big hassle or drawing by hand.
+troubles to understand, scale or fully exploit it.  It is always
+difficult and sometimes impossible to really work well with a tool
+you do not understand.  To aid learning Git, I thought it is a good
+idea to have a visual representation of the DAG under the hood.
+Inspired by [[http://teohm.com/blog/learning-git-internals-by-example/][Learning Git Internals by Example]], I wanted to have the
+possibility to visualize any Git repository without big hassle or
+drawing by hand.
 
-** Who?
-   :PROPERTIES:
-   :CUSTOM_ID: who
-   :END:
+*** Who?
 
-I use it. I also plan to write a tutorial so any new learner may try it
-out. It is intended for a purely educational purpose, displaying only
-small repos.
+I used it to augment my git understanding.  I also plan to write a
+tutorial so any new learner may try it out.  It is intended for a
+purely educational purpose, displaying only small repos and probably
+being only of time-limited use for the curious novice.  I highly
+welcome any contributions for improvement or tutorial content!
+
+** Example
+
+Let us have a look on an early states of exactly this repository and you
+will get the idea how this visualization can help to grasp its internals.
+
+For a hands-on learning experience, you should follow the detailed
+tutorial step-by-step. It is work in progress and will be added soon.
+
+Just looking how the graph evolves during the first 1..8 commits, it
+is obvious that graph representation is not a technique pleasing to
+the human eye.  It does not scale well for large repositories with a
+long history.  Anyhow, that is also not the purpose, you should have
+learned the main concept just looking at the very first few commits as
+demonstrated in the tutorial.  (I assume there are enthusiasts out
+there who have a fancy graph visualization of big repos - let me know
+about it, I would be happy to have a link here or in the tutorial!)
+
+Here is the log history for the first eight commits (latest on top):
+#+BEGIN_SRC 
+db942db fix: Prefer vertical alignment
+9a11060 feat: Add PlantUML declaration markup
+b9edfa3 chore: Add .gitignore
+52ec6e2 docs: Add README
+a4a71aa feat: Add Bash script version
+5f1cf24 img1 added
+a470d17 New dir and file
+ccc0e5f first commit
+#+END_SRC
+
+And this it how it looks like processed by /git2pic/ and /plantuml/:
+@@html:<img src="http://www.plantuml.com/plantuml/png/fPO_Rzim4CLtVmfrwHP7KlH7D0mXBHfqwj8rwC0_HuM0P1OKqw6Vlk0rPNLUh4EM87ZmxqZUUzJnSOqonDTbFdpu6UIqo2B8w7nH7eKuh5hEaFuzp61Z4NqHtFGI2-C2wEZyvV1SoQvhVnJdSmm0utXuhfkXR9AWPgzGw4Gx447L6hP8Kyf14s4eDHRLVbbSJ59RW-wk95jfIwM-AKkocq4trcuN5xAgIWh9fY_DjIJxYaggRdMrhQGUmDRRjLHNoueAe0KH11XxLTRqhI6_iQetstNqq0BfZjQw15f5Mz3atAOTXd9RnIZHr1Goe2HP2Rf1TbGG1eXWHTzl1Lk9WNXfkmTfY01DhRR8cvDtTsE1uSd-9mNJKvoAi_Qp3wUl0U0odbVt6qvLCvu_MZV3cFvKkT-8fOpTmYONVxdrkBva8nAAQSnDJGfk9tSiAHYhdFMaOAvsxXDNu6EuA1_3hl0np2eVm-3nCOmD7yDmlSi0lCMtiEFaefikFW1nWSaIAvWiyOF9afpYH-e_-tb-1OBwsK0OZTVtf4qS33l4nx0vV0pxmiSmftmCSyh5ylnA61upZvsau0b8bd46x2fDlCL9mVZePN-vAEa35yM-_KLnajqyfrnNYEjzdk-9HFj8Pd30tTh6zwTFNxuz7NsOo3vmyEtvTjHvFlCmOXDErPqxNGonYOUIgyX3IMjvABcIN1GJyGyL1cwXRfdehC872IEDRm-xX6Acy-ilANWbIHVnyRA__2DSJ7fA_m40" alt="Commit db942db visualization">@@
+
+Although this graph already looks overwhelming at first glance you
+will dissect it in short time.  Have a look on PlantUML source code
+(and additionally at the listings of the corresponding /.git//
+directory):
+
+#+BEGIN_SRC
+@startuml
+left to right direction
+[1a665] <<tree>>
+[24804] <<blob>>
+[2b2ce] <<tree>>
+[40a8c] <<tree>>
+[52ec6] <<commit>>
+[5f1cf] <<commit>>
+[74005] <<tree>>
+[8c4ff] <<blob>>
+[9a110] <<commit>>
+[a470d] <<commit>>
+[a4a71] <<commit>>
+[b25c1] <<blob>>
+[b3ef2] <<tree>>
+[b6ec9] <<tree>>
+[b9edf] <<commit>>
+[bd75d] <<tree>>
+[bfb7d] <<blob>>
+[c85ec] <<tree>>
+[ccc0e] <<commit>>
+[cfec5] <<tree>>
+[db942] <<commit>>
+[debad] <<blob>>
+[e68a6] <<blob>>
+[e69de] <<blob>>
+[ef977] <<blob>>
+[f198e] <<tree>>
+[f63ad] <<tree>>
+[fe42b] <<blob>>
+[52ec6] --> 1a665
+[40a8c] --> 24804 : <color:Green><size:14><&file>file1
+[b9edf] --> 2b2ce
+[ccc0e] --> 40a8c
+[db942] --> 74005
+[1a665] --> 8c4ff : <color:Green><size:14><&file>file1
+[2b2ce] --> 8c4ff : <color:Green><size:14><&file>file1
+[74005] --> 8c4ff : <color:Green><size:14><&file>file1
+[b6ec9] --> 8c4ff : <color:Green><size:14><&file>file1
+[cfec5] --> 8c4ff : <color:Green><size:14><&file>file1
+[f198e] --> 8c4ff : <color:Green><size:14><&file>file1
+[f63ad] --> 8c4ff : <color:Green><size:14><&file>file1
+[2b2ce] --> b25c1 : <color:Green><size:14><&file>.gitignore
+[74005] --> b25c1 : <color:Green><size:14><&file>.gitignore
+[b6ec9] --> b25c1 : <color:Green><size:14><&file>.gitignore
+[1a665] --> b3ef2 : <color:Blue><size:14><&folder>doc/
+[2b2ce] --> b3ef2 : <color:Blue><size:14><&folder>doc/
+[74005] --> b3ef2 : <color:Blue><size:14><&folder>doc/
+[b6ec9] --> b3ef2 : <color:Blue><size:14><&folder>doc/
+[cfec5] --> b3ef2 : <color:Blue><size:14><&folder>doc/
+[f198e] --> b3ef2 : <color:Blue><size:14><&folder>doc/
+[9a110] --> b6ec9
+[f63ad] --> bd75d : <color:Blue><size:14><&folder>doc/
+[1a665] --> bfb7d : <color:Green><size:14><&file>gitvis.sh
+[2b2ce] --> bfb7d : <color:Green><size:14><&file>gitvis.sh
+[f198e] --> bfb7d : <color:Green><size:14><&file>gitvis.sh
+[b3ef2] --> c85ec : <color:Blue><size:14><&folder>assets/
+[5f1cf] --> cfec5
+[b3ef2] --> debad : <color:Green><size:14><&file>file2
+[bd75d] --> debad : <color:Green><size:14><&file>file2
+[1a665] --> e68a6 : <color:Green><size:14><&file>README.md
+[2b2ce] --> e68a6 : <color:Green><size:14><&file>README.md
+[74005] --> e68a6 : <color:Green><size:14><&file>README.md
+[b6ec9] --> e68a6 : <color:Green><size:14><&file>README.md
+[c85ec] --> e69de : <color:Green><size:14><&file>img1
+[b6ec9] --> ef977 : <color:Green><size:14><&file>gitvis.sh
+[a4a71] --> f198e
+[a470d] --> f63ad
+[74005] --> fe42b : <color:Green><size:14><&file>gitvis.sh
+@enduml
+#+END_SRC
