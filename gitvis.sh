@@ -32,31 +32,31 @@ for obj in $(find .git/objects -type f  \
     | sed -e 's/^.git\/objects\///'  -e 's/\///' \
     | cut -c-5) 
 do
-    if [[ $(git cat-file -t $obj) == "commit" ]]
+    if [[ $(git cat-file -t "$obj") == "commit" ]]
     then
         echo "[$obj] <<commit>>"
-        git cat-file commit $obj \
+        git cat-file commit "$obj" \
         | grep tree \
-        | awk -v o=$obj \
+        | awk -v o="$obj" \
         '{printf "[%s] <<tree>>\n[%s] --> %s\n", \
 substr($2,1,5), o, substr($2,1,5)}'
-    elif [[ $(git cat-file -t $obj) == "tree" ]]
+    elif [[ $(git cat-file -t "$obj") == "tree" ]]
     then
-        for item in $(git ls-tree $obj | awk '{print $2}')
+        for item in $(git ls-tree "$obj" | awk '{print $2}')
         do
             if [[ $item == "tree" ]]
             then
-                git ls-tree $obj \
+                git ls-tree "$obj" \
                 | grep tree \
-                | awk -v o=$obj \
+                | awk -v o="$obj" \
                 '{printf "[%s] <<tree>>\n\
 [%s] --> %s : <color:Blue><size:14><&folder>%s/\n", \
 substr($3,1,5), o, substr($3,1,5), $4}'
             elif [[ $item == "blob" ]]
             then
-                git ls-tree $obj \
+                git ls-tree "$obj" \
                 | grep blob \
-                | awk -v o=$obj \
+                | awk -v o="$obj" \
                 '{printf "[%s] <<blob>>\n\
 [%s] --> %s : <color:Green><size:14><&file>%s\n", \
 substr($3,1,5), o, substr($3,1,5), $4}'
